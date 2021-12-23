@@ -83,7 +83,7 @@ public class CoinsControllerAPITest {
                         then().spec(responseSpecification).log().all().extract().response();
         userResponseJSONArray = new JSONArray(userResponse.asString());
 
-        System.out.println(this.userResponseJSONArray);
+       // System.out.println(this.userResponseJSONArray);
 
 //        ExtentTest test = extent.createTest("Specification Validations", "Checking the Status Code and the" +
 //                "request and response specifications prior to all others tests.");
@@ -92,8 +92,59 @@ public class CoinsControllerAPITest {
 
     }
 
+    @Test(
+            priority = 1
+    )
+    public void ValidateUniqueID() {
+
+        HashSet<String>userid = new HashSet<>();
+        int Number_of_Entries = this.userResponseJSONArray.length();
+
+        for(int i = 0; i < this.userResponseJSONArray.length(); ++i) {
+            JSONObject userJSONObject = this.userResponseJSONArray.getJSONObject(i);
+            userid.add(userJSONObject.get("id").toString());
+        }
 
 
+        Assert.assertEquals(userid.size() , Number_of_Entries);
+    }
+
+    @Test(
+            priority = 2
+    )
+    public void ValidatePrice() {
+        //Validate if all Prices > 0
+        boolean isPriceValid = true;
+
+        for(int i = 0; i < this.userResponseJSONArray.length(); ++i) {
+            JSONObject userJSONObject = this.userResponseJSONArray.getJSONObject(i);
+            if(Integer.parseInt(userJSONObject.get("price").toString()) <= 0){
+                isPriceValid = false;
+                break;
+            }
+        }
+
+
+        Assert.assertTrue(isPriceValid);
+    }
+    @Test(
+            priority = 3
+    )
+    public void ValidateCoins() {
+        //Validate if all coins >= 0
+        boolean isCoinsValid = true;
+
+        for(int i = 0; i < this.userResponseJSONArray.length(); ++i) {
+            JSONObject userJSONObject = this.userResponseJSONArray.getJSONObject(i);
+            if(Integer.parseInt(userJSONObject.get("coins").toString()) < 0){
+                isCoinsValid = false;
+                break;
+            }
+        }
+
+
+        Assert.assertTrue(isCoinsValid);
+    }
     @AfterTest
     public void windUp() {
         //extent.flush();
