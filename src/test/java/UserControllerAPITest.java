@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,7 +26,7 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
-public class GetUser {
+public class UserControllerAPITest {
     RequestSpecification requestSpecification;
     ResponseSpecification responseSpecification;
     RequestSpecBuilder requestSpecBuilder;
@@ -38,7 +39,7 @@ public class GetUser {
     static ExtentHtmlReporter htmlReporter;
     static ExtentReports extent;
 
-    public GetUser() throws FileNotFoundException {
+    public UserControllerAPITest() throws FileNotFoundException {
     }
 
     @BeforeTest
@@ -54,6 +55,10 @@ public class GetUser {
                 expectHeader("Content-Type", "application/json");
         responseSpecification = responseSpecBuilder.build();
 
+
+
+
+
 //        htmlReporter = new ExtentHtmlReporter("UserAPITestExtentReport.html");
 //        extent = new ExtentReports();
 //        extent.attachReporter(htmlReporter);
@@ -61,7 +66,7 @@ public class GetUser {
     }
 
     @Test(priority = 0)
-    public void specificationsValidations() {
+    public void GetSpecificationsValidations() {
         //validating t
         userResponse=
                 given().spec(requestSpecification).
@@ -139,12 +144,9 @@ public class GetUser {
 //        test.info("We validate all the password for the presence of one letter, one digit or one special character.");
     }
 
-    @AfterTest
-    public void windUp() {
-        //extent.flush();
-    }
 
-    public boolean validatePassword(String password) {
+
+    private boolean validatePassword(String password) {
         boolean valid = false;
         int numberCount = 0;
         int specialCharacterCount = 0;
@@ -178,5 +180,29 @@ public class GetUser {
         }
 
         return valid;
+    }
+    @Test(priority = 4)
+    public void PostSpecificationValidations() {
+        //validating t
+        File postJson= new File("src/test/TestResources/CreateUserData.json");
+        userResponse=
+                given().spec(requestSpecification).
+                        body(postJson).
+                        when().post(properties.getProperty("userUrl")).
+                        then().spec(responseSpecification).log().all().extract().response();
+        JSONObject userResponseJSON = new JSONObject(userResponse.asString());
+
+        System.out.println(userResponseJSON);
+
+//        ExtentTest test = extent.createTest("Specification Validations", "Checking the Status Code and the" +
+//                "request and response specifications prior to all others tests.");
+//        test.log(Status.INFO, "Validating Specifications.");
+//        test.info("The checking of the Request and Response Specification is done before other tests. The validations are complete.");
+
+    }
+
+    @AfterTest
+    public void windUp() {
+        //extent.flush();
     }
 }
