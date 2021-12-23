@@ -9,6 +9,7 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -32,6 +33,7 @@ public class QuizControllerAPITest {
     Properties properties = new Properties();
     FileInputStream fileinputstream = new FileInputStream("src/test/TestResources/Data.Properties");
     JSONArray userResponseJSONArray;
+        JSONObject userResponseJSONObject;
     Response userResponse;
     //ExtentReports
     static ExtentHtmlReporter htmlReporter;
@@ -78,10 +80,10 @@ public class QuizControllerAPITest {
                         when().get(properties.getProperty("quizUrlbyID")).
                         then().spec(responseSpecification).log().all().extract().response();
 
-        JSONObject userResponseJSONObject = new JSONObject(userResponse.asString());
+         userResponseJSONObject = new JSONObject(userResponse.asString());
 
 
-        System.out.println(userResponseJSONObject);
+      //  System.out.println(userResponseJSONObject);
 
 //        ExtentTest test = extent.createTest("Specification Validations", "Checking the Status Code and the" +
 //                "request and response specifications prior to all others tests.");
@@ -90,8 +92,36 @@ public class QuizControllerAPITest {
 
     }
 
+    @Test(
+            priority = 1
+    )
+    public void ValidateID() {
+        boolean isIDpresent = true;
 
 
+          if( this.userResponseJSONObject.get("id") == null){
+              isIDpresent = false;
+
+        }
+
+
+        Assert.assertTrue(isIDpresent);
+
+    }
+    @Test(
+            priority = 1
+    )
+    public void ValidateQuestion() {
+        boolean isQuestionPresent = true;
+        JSONArray questions = userResponseJSONObject.getJSONArray("questions");
+
+        if(questions.length() == 0){
+            isQuestionPresent = false;
+        }
+
+        Assert.assertTrue(isQuestionPresent);
+
+    }
     @AfterTest
     public void windUp() {
         //extent.flush();
