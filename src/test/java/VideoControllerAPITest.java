@@ -120,7 +120,7 @@ public class VideoControllerAPITest {
 
     }
     @Test(
-            priority = 2
+            priority = 3
     )
     public void ValidateCourseTitle() {
         boolean isTitlevalid = true;
@@ -132,28 +132,29 @@ public class VideoControllerAPITest {
         Assert.assertTrue(isTitlevalid);
     }
     @Test(
-            priority = 3
+            priority = 4
     )
     public void ValidateVideoType() {
+        //video Type contains youtube or not
         boolean isTypeYoutube = false;
         String videotype = userResponseJSONObject.get("videoType").toString().toLowerCase();
-        if (videotype != null){
-            if(isASubstring(videotype , "youtube")){
+
+            if(isASubstring(videotype)){
                 isTypeYoutube = true;
             }
-        }
+
 
         Assert.assertTrue(isTypeYoutube);
 
     }
 
-    private static boolean isASubstring(String videotype, String youtube){
+    private static boolean isASubstring(String videotype){
         int counter = 0;
         int i = 0;
-        for(;i<youtube.length();i++){
+        for(; i< "youtube".length(); i++){
             if(counter==videotype.length())
                 break;
-            if(videotype.charAt(counter)==youtube.charAt(i)){
+            if(videotype.charAt(counter)== "youtube".charAt(i)){
                 counter++;
             }else{
 

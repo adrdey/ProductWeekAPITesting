@@ -34,6 +34,7 @@ public class UserControllerAPITest {
    Properties properties = new Properties();
    FileInputStream fileinputstream = new FileInputStream("src/test/TestResources/Data.Properties");
     JSONArray userResponseJSONArray;
+    JSONObject userResponseJSONObject;
     Response userResponse;
     //ExtentReports
     static ExtentHtmlReporter htmlReporter;
@@ -74,7 +75,7 @@ public class UserControllerAPITest {
                         then().spec(responseSpecification).log().all().extract().response();
         userResponseJSONArray = new JSONArray(userResponse.asString());
 
-        System.out.println(this.userResponseJSONArray);
+        //System.out.println(this.userResponseJSONArray);
 
 //        ExtentTest test = extent.createTest("Specification Validations", "Checking the Status Code and the" +
 //                "request and response specifications prior to all others tests.");
@@ -190,9 +191,9 @@ public class UserControllerAPITest {
                         body(postJson).
                         when().post(properties.getProperty("userUrl")).
                         then().spec(responseSpecification).log().all().extract().response();
-        JSONObject userResponseJSON = new JSONObject(userResponse.asString());
+         userResponseJSONObject = new JSONObject(userResponse.asString());
 
-        System.out.println(userResponseJSON);
+       // System.out.println(userResponseJSON);
 
 //        ExtentTest test = extent.createTest("Specification Validations", "Checking the Status Code and the" +
 //                "request and response specifications prior to all others tests.");
@@ -201,7 +202,34 @@ public class UserControllerAPITest {
 
     }
 
+    @Test(
+            priority = 5
+    )
+    public void ValidateSuccessMessage() {
 
+        String expectedMessage = "Successfully sent verification email :";
+String actualMessage = null;
+        if (userResponseJSONObject.get("message") != null){
+            actualMessage =  userResponseJSONObject.get("message").toString();
+        }
+
+        Assert.assertEquals(actualMessage , expectedMessage);
+
+    }
+    @Test(
+            priority = 6
+    )
+    public void ValidateTimeStamp() {
+
+        boolean isTimeStampPresent = true;
+
+        if (userResponseJSONObject.get("timestamp") == null){
+            isTimeStampPresent = false;
+        }
+
+        Assert.assertTrue(isTimeStampPresent);
+
+    }
 
     @AfterTest
     public void windUp() {
