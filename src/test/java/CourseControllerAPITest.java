@@ -81,7 +81,7 @@ Map<String , String>headers = new HashMap<String, String>() {
                         then().spec(responseSpecification).log().all().extract().response();
         userResponseJSONArray = new JSONArray(userResponse.asString());
 
-        System.out.println(this.userResponseJSONArray);
+        //System.out.println(this.userResponseJSONArray);
 
 //        ExtentTest test = extent.createTest("Specification Validations", "Checking the Status Code and the" +
 //                "request and response specifications prior to all others tests.");
@@ -91,6 +91,74 @@ Map<String , String>headers = new HashMap<String, String>() {
     }
 
 
+    @Test(
+            priority = 1
+    )
+    public void ValidateUniqueIDofCourses() {
+
+        HashSet<String>courseid = new HashSet<>();
+        int Number_of_Entries = this.userResponseJSONArray.length();
+
+        for(int i = 0; i < this.userResponseJSONArray.length(); ++i) {
+            JSONObject userJSONObject = this.userResponseJSONArray.getJSONObject(i);
+            courseid.add(userJSONObject.get("id").toString());
+        }
+
+
+        Assert.assertEquals(courseid.size() , Number_of_Entries);
+    }
+    @Test(
+            priority = 2
+    )
+    public void ValidateUniqueTitleofCourses() {
+
+        HashSet<String>coursestitle = new HashSet<>();
+        int Number_of_Entries = this.userResponseJSONArray.length();
+
+        for(int i = 0; i < this.userResponseJSONArray.length(); ++i) {
+            JSONObject userJSONObject = this.userResponseJSONArray.getJSONObject(i);
+            coursestitle.add(userJSONObject.get("title").toString());
+        }
+
+
+        Assert.assertEquals(coursestitle.size() , Number_of_Entries);
+    }
+
+    @Test(
+            priority = 2
+    )
+    public void ValidateURLofCourses() {
+            boolean isCourseURLvalid = true;
+
+
+        for(int i = 0; i < this.userResponseJSONArray.length(); ++i) {
+            JSONObject userJSONObject = this.userResponseJSONArray.getJSONObject(i);
+            if(userJSONObject.get("url").toString() == null){
+                isCourseURLvalid = false;
+
+            }
+        }
+
+
+        Assert.assertTrue(isCourseURLvalid);
+    }
+
+    @Test(
+            priority = 2
+    )
+    public void ValidateUniqueDescriptionofCourses() {
+
+        HashSet<String>descriptionURL = new HashSet<>();
+        int Number_of_Entries = this.userResponseJSONArray.length();
+
+        for(int i = 0; i < this.userResponseJSONArray.length(); ++i) {
+            JSONObject userJSONObject = this.userResponseJSONArray.getJSONObject(i);
+            descriptionURL.add(userJSONObject.get("description").toString());
+        }
+
+
+        Assert.assertEquals(descriptionURL.size() , Number_of_Entries);
+    }
 
     @AfterTest
     public void windUp() {
