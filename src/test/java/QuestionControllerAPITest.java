@@ -11,6 +11,7 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -19,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 
@@ -35,6 +37,7 @@ public class QuestionControllerAPITest {
     FileInputStream fileinputstream = new FileInputStream("src/test/TestResources/Data.Properties");
     JSONArray userResponseJSONArray;
     Response userResponse;
+    JSONObject userResponseJSONObject;
     //ExtentReports
     static ExtentHtmlReporter htmlReporter;
     static ExtentReports extent;
@@ -81,10 +84,10 @@ public class QuestionControllerAPITest {
                         when().get(properties.getProperty("questionUrlbyID")).
                         then().spec(responseSpecification).log().all().extract().response();
 
-        JSONObject userResponseJSONObject = new JSONObject(userResponse.asString());
+
+        userResponseJSONObject  = new JSONObject(userResponse.asString());
 
 
-        System.out.println(userResponseJSONObject);
 
 //        ExtentTest test = extent.createTest("Specification Validations", "Checking the Status Code and the" +
 //                "request and response specifications prior to all others tests.");
@@ -93,8 +96,89 @@ public class QuestionControllerAPITest {
 
     }
 
+    @Test(
+            priority = 1
+    )
+    public void ValidateID() {
+
+      int targetID = 1;
+        int UserID = Integer.parseInt(userResponseJSONObject.get("id").toString());
+
+      Assert.assertEquals(UserID , targetID);
+    }
+
+    @Test(
+            priority = 2
+    )
+    public void ValidateContent() {
+
+        boolean isContentValid = true;
+        if(userResponseJSONObject.get("content").toString() == null){
+           isContentValid = false;
+        }
+
+        Assert.assertTrue(isContentValid);
+    }
+
+    @Test(
+            priority = 3
+    )
+    public void ValidateAnswer() {
+
+        boolean isAnswerYes = false;
+        if(userResponseJSONObject.get("answer").toString().equals("yes")){
+            isAnswerYes = true;
+        }
+
+        Assert.assertTrue(isAnswerYes);
+    }
+
+    @Test(
+            priority = 4
+    )
+    public void ValidateMarks() {
+
+        int targetMarks = 10;
+        int UserMarks = Integer.parseInt(userResponseJSONObject.get("marks").toString());
+
+        Assert.assertEquals(UserMarks , targetMarks);
+    }
+
+    @Test(
+            priority = 5
+    )
+    public void ValidateUniqueOptionNumber() {
+
+        JSONArray options = userResponseJSONObject.getJSONArray("options");
+        HashSet<String>NumberofOptions = new HashSet<>();
+        int Number_of_Entries = options.length();
+
+        for(int i = 0; i < options.length(); ++i) {
+            JSONObject userJSONObject = options.getJSONObject(i);
+            NumberofOptions.add(userJSONObject.get("id").toString());
+        }
 
 
+        Assert.assertEquals(NumberofOptions.size() , Number_of_Entries);
+    }
+
+    @Test(
+            priority = 5
+    )
+    public void ValidateUniqueOptions() {
+
+        JSONArray options = userResponseJSONObject.getJSONArray("options");
+        HashSet<String>UniqueOptions = new HashSet<>();
+        int Number_of_Entries = options.length();
+
+        for(int i = 0; i < options.length(); ++i) {
+            JSONObject userJSONObject = options.getJSONObject(i);
+            UniqueOptions.add(userJSONObject.get("content").toString());
+        }
+
+
+        Assert.assertEquals(UniqueOptions.size() , Number_of_Entries);
+    }
     @AfterTest
     public void windUp() {
         //extent.flush();
