@@ -87,7 +87,7 @@ public class CoinCartControllerAPITest {
                         then().spec(responseSpecification).log().all().extract().response();
         userResponseJSONArray = new JSONArray(userResponse.asString());
 
-        System.out.println(this.userResponseJSONArray);
+        //System.out.println(this.userResponseJSONArray);
 
 //        ExtentTest test = extent.createTest("Specification Validations", "Checking the Status Code and the" +
 //                "request and response specifications prior to all others tests.");
@@ -96,7 +96,15 @@ public class CoinCartControllerAPITest {
 
     }
 
+@Test (priority = 1)
+    public void UserResponseArrayValidation(){
+        boolean CoinCartSize = true;
+        if(this.userResponseJSONArray.length() == 0){
+            CoinCartSize = false;
+        }
 
+    Assert.assertTrue(CoinCartSize);
+    }
 
     @AfterTest
     public void windUp() {
