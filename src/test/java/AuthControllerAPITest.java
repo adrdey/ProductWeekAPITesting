@@ -10,6 +10,7 @@
         import io.restassured.specification.ResponseSpecification;
         import org.json.JSONArray;
         import org.json.JSONObject;
+        import org.testng.Assert;
         import org.testng.annotations.AfterTest;
         import org.testng.annotations.BeforeTest;
         import org.testng.annotations.Test;
@@ -34,6 +35,7 @@ public class AuthControllerAPITest {
     Properties properties = new Properties();
     FileInputStream fileinputstream = new FileInputStream("src/test/TestResources/Data.Properties");
     JSONArray userResponseJSONArray;
+    JSONObject userResponseJSONObject;
     Response userResponse;
     //ExtentReports
     static ExtentHtmlReporter htmlReporter;
@@ -74,11 +76,8 @@ public class AuthControllerAPITest {
 
                         when().post(properties.getProperty("authUrl")).
                         then().spec(responseSpecification).log().all().extract().response();
+         userResponseJSONObject = new JSONObject(userResponse.asString());
 
-        JSONObject userResponseJSONObject = new JSONObject(userResponse.asString());
-
-
-        System.out.println(userResponseJSONObject);
 
 //        ExtentTest test = extent.createTest("Specification Validations", "Checking the Status Code and the" +
 //                "request and response specifications prior to all others tests.");
@@ -87,7 +86,63 @@ public class AuthControllerAPITest {
 
     }
 
+@Test(priority =  1)
+public void AuthorityValidation(){
 
+boolean isAuthorityNormal = false;
+JSONArray RoleJSONArray = userResponseJSONObject.getJSONArray("role");
+
+
+    for (int i = 0 ; i < RoleJSONArray.length() ; i++){
+        JSONObject RoleJSONObject = RoleJSONArray.getJSONObject(i);
+        if(RoleJSONObject.get("authority").toString().equals("NORMAL")){
+
+            isAuthorityNormal = true;
+            break;
+        }
+
+    }
+
+    Assert.assertTrue(isAuthorityNormal);
+
+
+
+}
+
+
+    @Test(priority =  2)
+    public void UIDValidation(){
+
+        boolean isUIDPresent = true;
+
+            if(userResponseJSONObject.get("uid") == null) {
+                isUIDPresent = false;
+            }
+
+
+
+        Assert.assertTrue(isUIDPresent);
+
+
+
+    }
+
+    @Test(priority =  3)
+    public void TokenValidation(){
+   
+        boolean isTokenPresent = true;
+
+        if(userResponseJSONObject.get("token") == null) {
+            isTokenPresent = false;
+        }
+
+
+
+        Assert.assertTrue(isTokenPresent);
+
+
+
+    }
 
     @AfterTest
     public void windUp() {
