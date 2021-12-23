@@ -10,6 +10,7 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -18,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 
@@ -81,14 +83,9 @@ public class userCourseControllerAPITest {
                         then().spec(responseSpecification).log().all().extract().response();
 
         userResponseJSONArray = new JSONArray(userResponse.asString());
-//         RestAssured.given()
-//                 .pathParam("country", "Finland")
-//                 .when()
-//                 .get("http://restcountries.eu/rest/v1/name/{country}")
-//                 .then()
-//                 .body("capital", containsString("Helsinki"));
 
-        System.out.println(userResponseJSONArray);
+
+        //System.out.println(userResponseJSONArray);
 
 //        ExtentTest test = extent.createTest("Specification Validations", "Checking the Status Code and the" +
 //                "request and response specifications prior to all others tests.");
@@ -97,8 +94,60 @@ public class userCourseControllerAPITest {
 
     }
 
+    @Test(
+            priority = 1
+    )
+    public void UsernameValidation() {
+        HashSet<String> username = new HashSet<>();
+        int Number_of_Entries = this.userResponseJSONArray.length();
+
+        for(int i = 0; i < this.userResponseJSONArray.length(); ++i) {
+            JSONObject userJSONObject = this.userResponseJSONArray.getJSONObject(i);
+            username.add(userJSONObject.get("username").toString());
+        }
 
 
+        Assert.assertEquals(username.size() , Number_of_Entries);
+
+    }
+    @Test(
+            priority = 2
+    )
+    public void StarsValidation() {
+        boolean isStarValid = true;
+
+
+        for(int i = 0; i < this.userResponseJSONArray.length(); ++i) {
+            JSONObject userJSONObject = this.userResponseJSONArray.getJSONObject(i);
+            if(Integer.parseInt(userJSONObject.get("star").toString()) <= 0){
+                isStarValid = false;
+                break;
+            }
+        }
+
+
+        Assert.assertTrue(isStarValid);
+
+    }
+    @Test(
+            priority = 3
+    )
+    public void CommentValidation() {
+        boolean isCommentValid = true;
+
+
+        for(int i = 0; i < this.userResponseJSONArray.length(); ++i) {
+            JSONObject userJSONObject = this.userResponseJSONArray.getJSONObject(i);
+            if(userJSONObject.get("comment").toString().equals("null")){
+                isCommentValid = false;
+                break;
+            }
+        }
+
+
+        Assert.assertTrue(isCommentValid);
+
+    }
     @AfterTest
     public void windUp() {
         //extent.flush();

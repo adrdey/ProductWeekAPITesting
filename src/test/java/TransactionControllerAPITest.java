@@ -10,6 +10,7 @@
  import io.restassured.specification.ResponseSpecification;
  import org.json.JSONArray;
  import org.json.JSONObject;
+ import org.testng.Assert;
  import org.testng.annotations.AfterTest;
  import org.testng.annotations.BeforeTest;
  import org.testng.annotations.Test;
@@ -18,6 +19,7 @@
  import java.io.FileNotFoundException;
  import java.io.IOException;
  import java.util.HashMap;
+ import java.util.HashSet;
  import java.util.Map;
  import java.util.Properties;
 
@@ -82,14 +84,9 @@
                          then().spec(responseSpecification).log().all().extract().response();
 
          userResponseJSONArray = new JSONArray(userResponse.asString());
-//         RestAssured.given()
-//                 .pathParam("country", "Finland")
-//                 .when()
-//                 .get("http://restcountries.eu/rest/v1/name/{country}")
-//                 .then()
-//                 .body("capital", containsString("Helsinki"));
 
-         System.out.println(userResponseJSONArray);
+
+        // System.out.println(userResponseJSONArray);
 
 //        ExtentTest test = extent.createTest("Specification Validations", "Checking the Status Code and the" +
 //                "request and response specifications prior to all others tests.");
@@ -98,7 +95,69 @@
 
      }
 
+     @Test(
+             priority = 1
+     )
+     public void ValidateID() {
 
+            boolean isIDPresent = true;
+         for(int i = 0; i < this.userResponseJSONArray.length(); ++i) {
+             JSONObject userJSONObject = this.userResponseJSONArray.getJSONObject(i);
+             if(userJSONObject.get("id").toString() == null){
+                 isIDPresent = false;
+             }
+         }
+
+
+         Assert.assertTrue(isIDPresent);
+     }
+
+     @Test(
+             priority = 1
+     )
+     public void ValidateTransaction() {
+
+
+         boolean isTransactionValid;
+
+         boolean isIDPresent = true;
+         boolean isTransactionIDPresent = true;
+         boolean isTotalCoinsPresent = true;
+         boolean isStatusSucceed = true;
+         boolean isTypePresent = true;
+         boolean isDatePresent = true;
+         boolean isProductPurchased = true;
+         for(int i = 0; i < this.userResponseJSONArray.length(); ++i) {
+             JSONObject userJSONObject = this.userResponseJSONArray.getJSONObject(i);
+             JSONObject transaction = userJSONObject.getJSONObject("transaction");
+             if(transaction.get("id").toString() == null){
+                 isIDPresent = false;
+             }
+             if(transaction.get("transactionId").toString() == null){
+                 isTransactionIDPresent = false;
+             }
+             if(transaction.get("totalCoin").toString() == null){
+                 isTotalCoinsPresent = false;
+             }
+             if(transaction.get("status").toString() == null){
+                 isStatusSucceed = false;
+             }
+             if(transaction.get("type").toString() == null){
+                 isTypePresent = false;
+             }
+             if(transaction.get("date").toString() == null){
+                 isDatePresent = false;
+             }
+
+             JSONArray purchasedProducts = transaction.getJSONArray("purchasedProducts");
+             if(purchasedProducts.length() == 0){
+                 isProductPurchased = false;
+             }
+         }
+
+         isTransactionValid = isDatePresent && isIDPresent && isTypePresent && isTransactionIDPresent && isProductPurchased && isTotalCoinsPresent && isStatusSucceed;
+         Assert.assertTrue(isTransactionValid);
+     }
 
      @AfterTest
      public void windUp() {

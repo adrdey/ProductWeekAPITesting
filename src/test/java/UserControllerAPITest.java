@@ -106,7 +106,7 @@ public class UserControllerAPITest {
     @Test(
             priority = 2
     )
-    public void UniqueIDpresent() {
+    public void ValidateUniqueID() {
 
         HashSet<String>userid = new HashSet<>();
         int Number_of_Entries = this.userResponseJSONArray.length();
@@ -200,6 +200,8 @@ public class UserControllerAPITest {
 //        test.info("The checking of the Request and Response Specification is done before other tests. The validations are complete.");
 
     }
+
+
 
     @AfterTest
     public void windUp() {
