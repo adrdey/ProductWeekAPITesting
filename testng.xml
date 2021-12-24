@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+<listeners>
+    <listener class-name="Resources.Listener"/>
+</listeners>
+<test verbose="2" preserve-order="true" name="C:/Users/adrdey/IdeaProjects/ProductWeek_API_Assignment">
+<classes>
+<class name="TestCases.AuthControllerAPITest">
+<methods>
+<include name="GetSpecificationsValidations"/>
+<include name="PostSpecificationsValidations"/>
+<include name="AuthorityValidation"/>
+<include name="UIDValidation"/>
+<include name="TokenValidation"/>
+</methods>
+</class>
+<class name="TestCases.CoinCartControllerAPITest">
+<methods>
+<include name="specificationsValidations"/>
+<include name="UserResponseArrayValidation"/>
+</methods></class><class name="TestCases.CoinsControllerAPITest">
+<methods><include name="specificationsValidations"/>
+<include name="ValidateUniqueID"/><include name="ValidatePrice"/><include name="ValidateCoins"/></methods></class><class name="TestCases.CourseControllerAPITest"><methods><include name="specificationsValidations"/><include name="ValidateUniqueIDofCourses"/><include name="ValidateUniqueTitleofCourses"/><include name="ValidateURLofCourses"/><include name="ValidateUniqueDescriptionofCourses"/></methods></class><class name="TestCases.QuestionControllerAPITest"><methods><include name="specificationsValidations"/><include name="ValidateID"/><include name="ValidateContent"/><include name="ValidateAnswer"/><include name="ValidateMarks"/><include name="ValidateUniqueOptionNumber"/><include name="ValidateUniqueOptions"/></methods></class><class name="TestCases.QuizControllerAPITest"><methods><include name="specificationsValidations"/><include name="ValidateID"/><include name="ValidateQuestion"/></methods></class><class name="TestCases.TransactionControllerAPITest"><methods><include name="specificationsValidations"/><include name="ValidateID"/><include name="ValidateTransaction"/></methods></class><class name="TestCases.UserControllerAPITest"><methods><include name="GetSpecificationsValidations"/><include name="UsersandEmailPresentValidation"/><include name="ValidateUniqueID"/><include name="userPasswordValidation"/><include name="PostSpecificationValidations"/><include name="ValidateSuccessMessage"/><include name="ValidateTimeStamp"/></methods></class><class name="TestCases.VideoControllerAPITest"><methods><include name="specificationsValidations"/><include name="ValidateID"/><include name="ValidateURL"/><include name="ValidateCourseTitle"/><include name="ValidateVideoType"/></methods></class><class name="TestCases.userCourseControllerAPITest"><methods><include name="specificationsValidations"/><include name="UsernameValidation"/><include name="StarsValidation"/><include name="CommentValidation"/></methods></class></classes></test></suite>

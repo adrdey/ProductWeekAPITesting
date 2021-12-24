@@ -3,6 +3,7 @@ package Resources;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 
+
 import java.io.File;
 import java.io.IOException;
 
@@ -13,7 +14,7 @@ public class Base {
 
     public static ExtentReports ReportObject()
     {
-        String path = "/Report/index.html";
+        String path = "/Users/adrdey/IdeaProjects/ProductWeek_API_Assignment/Report/index.html";
 
         ExtentSparkReporter reporter = new ExtentSparkReporter(path);
         reporter.config().setReportName("Skill Stack API Test  Results");
