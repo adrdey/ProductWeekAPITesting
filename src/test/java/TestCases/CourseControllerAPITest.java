@@ -10,8 +10,6 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.testng.Assert;
@@ -67,7 +65,7 @@ public class CourseControllerAPITest extends Base {
     @Test(priority = 0)
     public void specificationsValidations() {
         //validating t
-String token = properties.getProperty("tokenforuser");
+String token = properties.getProperty("GlobalToken");
 Map<String , String>headers = new HashMap<String, String>() {
     {
         put("Accept", "application/json");

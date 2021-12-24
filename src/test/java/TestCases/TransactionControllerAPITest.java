@@ -67,7 +67,7 @@ import Resources.Base;
      @Test(priority = 0)
      public void specificationsValidations() {
          //validating t
-         String token = properties.getProperty("tokenforuser");
+         String token = properties.getProperty("GlobalToken");
          Map<String , String> headers = new HashMap<String, String>() {
              {
                  put("Accept", "application/json");
@@ -76,7 +76,7 @@ import Resources.Base;
              }
 
          };
-         String username = properties.getProperty("UsernameGlobal");
+         String username = properties.getProperty("GlobalTokenUsername");
          userResponse=
                  given().spec(requestSpecification).
                            params("name", username).

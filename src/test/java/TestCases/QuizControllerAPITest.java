@@ -68,7 +68,7 @@ public class QuizControllerAPITest extends Base {
     @Test(priority = 0)
     public void specificationsValidations() {
         //validating t
-        String token = properties.getProperty("tokenforuser");
+        String token = properties.getProperty("GlobalToken");
         Map<String , String> headers = new HashMap<String, String>() {
             {
                 put("Accept", "application/json");

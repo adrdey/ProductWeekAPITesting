@@ -188,12 +188,15 @@ public class UserControllerAPITest extends Base {
     public void PostSpecificationValidations() {
         //validating t
         File postJson= new File("src/test/TestResources/CreateUserData.json");
-        userResponse=
-                given().spec(requestSpecification).
-                        body(postJson).
-                        when().post(properties.getProperty("userUrl")).
-                        then().spec(responseSpecification).log().all().extract().response();
-         userResponseJSONObject = new JSONObject(userResponse.asString());
+
+
+            userResponse =
+                    given().spec(requestSpecification).
+                            body(postJson).
+                            when().post(properties.getProperty("userUrl")).
+                            then().spec(responseSpecification).log().all().extract().response();
+            userResponseJSONObject = new JSONObject(userResponse.asString());
+
 
        // System.out.println(userResponseJSON);
 

@@ -69,7 +69,7 @@ public class AuthControllerAPITest extends Base {
 
     @Test(priority = -1)
     public  void GetSpecificationsValidations(){
-        String token = properties.getProperty("tokenforuser");
+        String token = properties.getProperty("GlobalToken");
         Map<String , String> headers = new HashMap<String, String>() {
             {
                 put("Accept", "application/json");
@@ -78,7 +78,7 @@ public class AuthControllerAPITest extends Base {
             }
 
         };
-        String username = properties.getProperty("TokenUsername");
+        String username = properties.getProperty("UserToken");
         userResponse=
                 given().spec(requestSpecification).
                         headers(headers).
@@ -101,11 +101,6 @@ public class AuthControllerAPITest extends Base {
                         then().spec(responseSpecification).log().all().extract().response();
          userResponseJSONObject = new JSONObject(userResponse.asString());
 
-
-//        ExtentTest test = extent.createTest("Specification Validations", "Checking the Status Code and the" +
-//                "request and response specifications prior to all others tests.");
-//        test.log(Status.INFO, "Validating Specifications.");
-//        test.info("The checking of the Request and Response Specification is done before other tests. The validations are complete.");
 
     }
 
